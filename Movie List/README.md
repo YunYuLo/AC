@@ -26,7 +26,7 @@
     - [線上工具–Regex Tester](https://www.regexpal.com)
     ```javascript
     let searchInput = 'ant' //user input key words
-    const regex = new RegExp(searchInput, 'i') //searching rules
+    const regex = new RegExp(searchInput, 'i') //input key and set rules
     let results = data.filter(
     movie => movie.title.match(regex) //whether element from data match the key words
     )
@@ -66,3 +66,8 @@
     - localStorage.getItem('key') 取出
     - localStorage.removeItem('key') 移除
 - local storage 裡的 value 是 string type，也就是存入 data 時需要呼叫 [JSON.stringify(obj)，而取出時需要呼叫 JSON.parse(value)](https://cythilya.github.io/2015/05/09/javascript-json-parse-stringify/)
+
+## Delete Button - process
+- 運用 id 值刪除電影
+- [Array.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
+- [Array.splice(start[, deleteCount])](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)changes the contents of an array by removing or replacing existing elements and/or adding new elements
