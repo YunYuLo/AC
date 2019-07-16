@@ -100,7 +100,7 @@
     if (event.target.tagName === 'A') {
       getPageData(event.target.dataset.page)
     }
-  })
+    })
     ```
 4. 取出特定頁面的資料
     ```javascript
@@ -111,5 +111,5 @@
     let offset = (pageNum - 1) * ITEM_PER_PAGE
     let pageData = paginationData.slice(offset, offset + ITEM_PER_PAGE)
     displayDataList(pageData)
-  }
+    }
     ```
