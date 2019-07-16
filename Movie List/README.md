@@ -61,8 +61,8 @@
 
 ## About [local storage](https://www.w3schools.com/htmL/html5_webstorage.asp)
 - 資料會以類似 JSON 的 Key-Value pair 的格式儲存，key 和 value 都需要是字串 (string)
-- Manipulate
-    - setItem 存入
-    - getItem 取出
-    - removeItem 移除
+- [Manipulate](https://www.huanlintalk.com/2012/06/html5-web-storage.html)
+    - localStorage.setItem('key', 'value') 存入
+    - localStorage.getItem('key') 取出
+    - localStorage.removeItem('key') 移除
 - local storage 裡的 value 是 string type，也就是存入 data 時需要呼叫 [JSON.stringify(obj)，而取出時需要呼叫 JSON.parse(value)](https://cythilya.github.io/2015/05/09/javascript-json-parse-stringify/)
