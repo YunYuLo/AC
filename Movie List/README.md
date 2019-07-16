@@ -39,4 +39,30 @@
 1. 在電影卡片上增加收藏按鈕
 2. 監聽收藏按鈕的點擊事件
 3. 點擊事件觸發時，取得電影項目並儲存到另一個清單
+    ```javascript
+    function addFavoriteItem (id) {
+    //取出local storage 裡的 value，若使用者是第一次使用收藏功能，則會找不到東西，所以需要建立一個空 Array。
+    const list = JSON.parse(localStorage.getItem('favoriteMovies')) || []
+    //從電影總表中找出 id 符合條件的電影物件
+    const movie = data.find(item => item.id === Number(id))
+    
+    if (list.some(item => item.id === Number(id))) {
+    alert(`${movie.title} is already in your favorite list.`)
+    } else {
+    list.push(movie)
+    alert(`Added ${movie.title} to your favorite list!`)
+    }
+    localStorage.setItem('favoriteMovies', JSON.stringify(list))
+    }
+    ```
+    - [Array.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) returns the value of the first element in the array that satisfies the provided testing function. Otherwise undefined is returned.
+    - [Array.some()](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/some)tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
 4. 在 favorite.html 輸出清單
+
+## About [local storage](https://www.w3schools.com/htmL/html5_webstorage.asp)
+- 資料會以類似 JSON 的 Key-Value pair 的格式儲存，key 和 value 都需要是字串 (string)
+- Manipulate
+    - setItem 存入
+    - getItem 取出
+    - removeItem 移除
+- local storage 裡的 value 是 string type，也就是存入 data 時需要呼叫 [JSON.stringify(obj)，而取出時需要呼叫 JSON.parse(value)](https://cythilya.github.io/2015/05/09/javascript-json-parse-stringify/)
