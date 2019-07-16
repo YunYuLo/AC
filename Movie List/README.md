@@ -1,5 +1,5 @@
 # MovieList
-## searching btn-process
+## Searching Button - process
 1. 新增 search bar 的 UI 元件
     ```html
     <!--search bar-->
@@ -32,4 +32,11 @@
     )
     console.log(results)
     ```
+    - [JavaScript 陣列(Array)處理方法](https://wcc723.github.io/javascript/2017/06/29/es6-native-array/)
 4. 將匹配結果回傳到網頁畫面上
+
+## Favorite Button - process
+1. 在電影卡片上增加收藏按鈕
+2. 監聽收藏按鈕的點擊事件
+3. 點擊事件觸發時，取得電影項目並儲存到另一個清單
+4. 在 favorite.html 輸出清單
