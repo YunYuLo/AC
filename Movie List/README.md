@@ -71,3 +71,45 @@
 - 運用 id 值刪除電影
 - [Array.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex)returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1, indicating that no element passed the test.
 - [Array.splice(start[, deleteCount])](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)changes the contents of an array by removing or replacing existing elements and/or adding new elements
+
+## Pagination
+1. 新增 pagination 的 UI 元件
+    - Bootstrap 提供的 [Pagination](https://getbootstrap.com/docs/4.1/components/pagination/#alignment) 元件
+2. 計算總頁數並演算 li.page-item
+    ```javascript
+    const pagination = document.getElementById('pagination')
+    const ITEM_PER_PAGE = 12
+    
+    function getTotalPages (data) {
+    let totalPages = Math.ceil(data.length / ITEM_PER_PAGE) || 1 //counting how many pages
+    let pageItemContent = ''
+    for (let i = 0; i < totalPages; i++) {
+      pageItemContent += ` //adding list
+        <li class="page-item">
+          <a class="page-link" href="javascript:;" data-page="${i + 1}">${i + 1}</a>
+        </li>
+      `
+    }
+    pagination.innerHTML = pageItemContent
+    }
+    ```
+3. Pagination 標籤的事件監聽器
+    ```javascript
+    pagination.addEventListener('click', event => {
+    console.log(event.target.dataset.page)
+    if (event.target.tagName === 'A') {
+      getPageData(event.target.dataset.page)
+    }
+  })
+    ```
+4. 取出特定頁面的資料
+    ```javascript
+    let paginationData = []
+    
+    function getPageData (pageNum, data) {
+    paginationData = data || paginationData
+    let offset = (pageNum - 1) * ITEM_PER_PAGE
+    let pageData = paginationData.slice(offset, offset + ITEM_PER_PAGE)
+    displayDataList(pageData)
+  }
+    ```
