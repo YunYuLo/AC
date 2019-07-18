@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Movie List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
     crossorigin="anonymous">
 </head>
@@ -41,7 +42,12 @@
         <input type="text" class="form-control mb-2 mr-sm-2" id="search-input" placeholder="search name...">
         <button type="submit" class="btn btn-primary mb-2">Search</button>
       </form>
+      <div style="position: absolute; left: 80%; font-size: 28px;" id="change-view">
+        <a class="btn text-right mr-sm-2 list" href="#"><i class="fa fa-bars list" aria-hidden="true"></i></a>
+        <a class="btn text-right mr-sm-2 picView" href="#"><i class="fa fa-th picView" aria-hidden="true"></i></a>
+      </div>
     </div>
+    <!--change show list-->
     <div class="row" id="data-panel">
       <!-- print movie list here -->
     </div>
@@ -73,6 +79,16 @@
       </div>
     </div>
   </div>
+
+  <!--Pagination-->
+  <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center" id="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+          <!--show page list here-->
+        </li>
+      </ul>
+    </nav>
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
