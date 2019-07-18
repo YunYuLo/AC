@@ -3,21 +3,66 @@
   const INDEX_URL = BASE_URL + '/api/v1/movies/'
   const POSTER_URL = BASE_URL + '/posters/'
   const data = []
+  let paginationData = []
 
+  const searchForm = document.getElementById('search')
+  const searchInput = document.getElementById('search-input')
   const dataPanel = document.getElementById('data-panel')
+  const pagination = document.getElementById('pagination')
+  const container = document.querySelector('.container')
+  const ITEM_PER_PAGE = 12
 
   axios.get(INDEX_URL).then((response) => {
     data.push(...response.data.results)
-    displayDataList(data)
+    // displayDataList(data)
+    getTotalPages(data)
+    getPageData(1, data)
   }).catch((err) => console.log(err))
 
+  /*********** EventListener ***********/
   // listen to data panel
   dataPanel.addEventListener('click', (event) => {
     if (event.target.matches('.btn-show-movie')) {
       showMovie(event.target.dataset.id)
+    } else if (event.target.matches('.btn-add-favorite')) {
+      addFavoriteItem(event.target.dataset.id)
     }
   })
 
+  // listen to pagination click event
+  pagination.addEventListener('click', event => {
+    if (event.target.tagName === 'A') {
+      getPageData(event.target.dataset.page)
+    }
+  })
+
+  // listen to search form submit event
+  searchForm.addEventListener('submit', event => {
+    event.preventDefault()
+
+    let results = []
+    const regex = new RegExp(searchInput.value, 'i')
+
+
+    results = data.filter(movie => movie.title.match(regex))
+    // displayDataList(results)
+    getTotalPages(results)
+    getPageData(1, results)
+  })
+
+  //listen to change view
+  container.addEventListener('click', event => {
+    if (event.target.classList.contains("list")) {
+      dataPanel.classList.add('listView')
+      getPageData(page)
+    } else if (event.target.classList.contains("picView")){
+      dataPanel.classList.remove('listView')
+      getPageData(page)
+    }
+  })
+
+  /*********** function ***********/
+  //display pic with title
   function displayDataList (data) {
     let htmlContent = ''
     data.forEach(function (item, index) {
@@ -26,12 +71,14 @@
           <div class="card mb-2">
             <img class="card-img-top " src="${POSTER_URL}${item.image}" alt="Card image cap">
             <div class="card-body movie-item-body">
-              <h6 class="card-title">${item.title}</h5>
+              <h6 class="card-title">${item.title}</h6>
             </div>
 
             <!-- "More" button -->
             <div class="card-footer">
               <button class="btn btn-primary btn-show-movie" data-toggle="modal" data-target="#show-movie-modal" data-id="${item.id}">More</button>
+              <!-- favorite button --> 
+              <button class="btn btn-info btn-add-favorite" data-id="${item.id}">+</button>
             </div>
           </div>
         </div>
@@ -40,6 +87,24 @@
     dataPanel.innerHTML = htmlContent
   }
 
+  //display title only
+  function displayListOnly (data) {
+    let htmlContent = ''
+    data.forEach(function(item, index) {
+      htmlContent += `
+        <div class="col-sm-9 mb-2 mt-2 bg-light">
+          <h6 class="title">${item.title}</h6>
+        </div>
+        <div class="col-sm-3 mb-2 mt-2">
+          <button class="btn btn-primary btn-show-movie" data-toggle="modal" data-target="#show-movie-modal" data-id="${item.id}">More</button>
+          <button class="btn btn-info btn-add-favorite" data-id="${item.id}">+</button>
+        </div>
+      `
+    })
+    dataPanel.innerHTML = htmlContent
+  }
+
+  //show more detail of movie
   function showMovie (id) {
     // get elements
     const modalTitle = document.getElementById('show-movie-title')
@@ -49,12 +114,10 @@
 
     // set request url
     const url = INDEX_URL + id
-    console.log(url)
 
     // send request to show api
     axios.get(url).then(response => {
       const data = response.data.results
-      console.log(data)
 
       // insert data into modal ui
       modalTitle.textContent = data.title
@@ -64,21 +127,46 @@
     })
   }
 
-  const searchForm = document.getElementById('search')
-  const searchInput = document.getElementById('search-input')
+  function addFavoriteItem (id) {
+    const list = JSON.parse(localStorage.getItem('favoriteMovies')) || []
+    const movie = data.find(item => item.id === Number(id))
 
-  // listen to search form submit event
-  searchForm.addEventListener('submit', event => {
-    event.preventDefault()
-    console.log('click!')
+     if (list.some(item => item.id === Number(id))) {
+      alert(`${movie.title} is already in your favorite list.`)
+    } else {
+      list.push(movie)
+      alert(`Added ${movie.title} to your favorite list!`)
+    }
+    localStorage.setItem('favoriteMovies', JSON.stringify(list))
+  }
 
-    //再看一次～～～
-    const regex = new RegExp(searchInput.value, 'i')
+  //Pagination
+  function getTotalPages (data) {
+    let totalPages = Math.ceil(data.length / ITEM_PER_PAGE) || 1
+    let pageItemContent = ''
+    for (let i = 0; i < totalPages; i++) {
+      pageItemContent += `
+        <li class="page-item">
+          <a class="page-link" href="javascript:;" data-page="${i + 1}">${i + 1}</a>
+        </li>
+      `
+    }
+    pagination.innerHTML = pageItemContent
+  }
 
+  function getPageData (pageNum, data) {
+    page = pageNum || 1
+    paginationData = data || paginationData
+    let offset = (pageNum - 1) * ITEM_PER_PAGE
+    let pageData = paginationData.slice(offset, offset + ITEM_PER_PAGE)
+    let listView = dataPanel.classList.contains('listView')
 
-    results = data.filter(movie => movie.title.match(regex))
-    console.log(results)
-    displayDataList(results)
-  })
+    //whether listView or pictureView
+    if (listView === true) {
+      displayListOnly (pageData)
+    } else if (listView !== true) {
+      displayDataList(pageData)
+    }
+  }
 
 })()
