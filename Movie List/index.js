@@ -1,10 +1,33 @@
 (function () {
+  const genres = {
+    "1": "Action",
+    "2": "Adventure",
+    "3": "Animation",
+    "4": "Comedy",
+    "5": "Crime",
+    "6": "Documentary",
+    "7": "Drama",
+    "8": "Family",
+    "9": "Fantasy",
+    "10": "History",
+    "11": "Horror",
+    "12": "Music",
+    "13": "Mystery",
+    "14": "Romance",
+    "15": "Science Fiction",
+    "16": "TV Movie",
+    "17": "Thriller",
+    "18": "War",
+    "19": "Western"
+  }
   const BASE_URL = 'https://movie-list.alphacamp.io'
   const INDEX_URL = BASE_URL + '/api/v1/movies/'
   const POSTER_URL = BASE_URL + '/posters/'
   const data = []
   let paginationData = []
 
+  const content = document.querySelector('.content')
+  const genresBtn = document.querySelector('#genres-btn')
   const searchForm = document.getElementById('search')
   const searchInput = document.getElementById('search-input')
   const dataPanel = document.getElementById('data-panel')
@@ -12,6 +35,29 @@
   const container = document.querySelector('.container')
   const ITEM_PER_PAGE = 12
 
+  content.addEventListener('click', function(event){
+    let selectedGenresId = Number(event.target.dataset.genresId)
+    const genresData = data.filter(function(movie){
+      return movie.genres.includes(selectedGenresId)
+    })
+    getTotalPages(genresData)
+    getPageData(1, genresData)
+  })
+
+  //show genres btn
+  displayGenresBtn()
+  function displayGenresBtn(){
+    let htmlContent = ''
+    Object.keys(genres)
+    .forEach(function eachKey(key){
+      htmlContent +=`
+      <button type="button" class="btn btn-outline-primary" data-genres-id="${key}">${genres[key]}</button>
+      `
+    })
+    genresBtn.innerHTML = htmlContent
+  }
+
+  //show movie on html
   axios.get(INDEX_URL).then((response) => {
     data.push(...response.data.results)
     // displayDataList(data)
@@ -61,6 +107,7 @@
     }
   })
 
+
   /*********** function ***********/
   //display pic with title
   function displayDataList (data) {
@@ -71,7 +118,15 @@
           <div class="card mb-2">
             <img class="card-img-top " src="${POSTER_URL}${item.image}" alt="Card image cap">
             <div class="card-body movie-item-body">
-              <h6 class="card-title">${item.title}</h6>
+              <h6 class="card-title">${item.title}</h6>`
+      
+      item.genres.forEach(function(key){
+        htmlContent +=`
+        <button type="button" class="btn btn-light btn-sm" data-genres-id="${key}">${genres[key]}</button>
+        `
+      })
+ 
+      htmlContent +=`
             </div>
 
             <!-- "More" button -->
